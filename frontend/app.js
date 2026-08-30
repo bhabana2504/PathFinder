@@ -1108,27 +1108,36 @@ function openAuthModal() {
 }
 
 function closeAuthModal() {
-  document.getElementById("auth-modal").classList.add("hidden");
+  const modal = document.getElementById("auth-modal");
+  if (modal) modal.classList.add("hidden");
 }
 
-document.getElementById("auth-close-button").addEventListener("click", closeAuthModal);
-document.getElementById("tab-login").addEventListener("click", () => setAuthMode("login"));
-document.getElementById("tab-register").addEventListener("click", () => setAuthMode("register"));
+const closeBtn = document.getElementById("auth-close-button");
+if (closeBtn) closeBtn.addEventListener("click", closeAuthModal);
 
-document.getElementById("btn-auth-action").addEventListener("click", () => {
-  if (token) {
-    // Log out
-    localStorage.removeItem("token");
-    token = null;
-    currentUser = null;
-    updateNavbarState();
-    showToast("Logged out successfully.");
-    window.location.hash = "#discover";
-  } else {
-    // Log in
-    openAuthModal();
-  }
-});
+const tabLogin = document.getElementById("tab-login");
+if (tabLogin) tabLogin.addEventListener("click", () => setAuthMode("login"));
+
+const tabRegister = document.getElementById("tab-register");
+if (tabRegister) tabRegister.addEventListener("click", () => setAuthMode("register"));
+
+const authActionBtn = document.getElementById("btn-auth-action");
+if (authActionBtn) {
+  authActionBtn.addEventListener("click", () => {
+    if (token) {
+      // Log out
+      localStorage.removeItem("token");
+      token = null;
+      currentUser = null;
+      updateNavbarState();
+      showToast("Logged out successfully.");
+      window.location.hash = "#discover";
+    } else {
+      // Log in
+      openAuthModal();
+    }
+  });
+}
 
 // Trigger modal onboard buttons on Discover landing
 document.querySelectorAll(".btn-onboard-trigger").forEach(btn => {
@@ -1142,51 +1151,62 @@ document.querySelectorAll(".btn-onboard-trigger").forEach(btn => {
 });
 
 // Auth form submission
-document.getElementById("form-auth").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const email = document.getElementById("auth-input-email").value;
-  const password = document.getElementById("auth-input-password").value;
-  const name = document.getElementById("auth-input-name").value;
-
-  const errorBanner = "auth-error-banner";
-  clearErrorBanner(errorBanner);
-
-  showLoader(true, authMode === "login" ? "Connecting to your atlas..." : "Creating your atlas...");
-  try {
-    let loginRes;
-    if (authMode === "login") {
-      loginRes = await apiRequest("/api/auth/login", "POST", { email, password });
-    } else {
-      await apiRequest("/api/auth/register", "POST", { email, password, name });
-      loginRes = await apiRequest("/api/auth/login", "POST", { email, password });
-    }
-
-    token = loginRes.access_token;
-    localStorage.setItem("token", token);
+const formAuth = document.getElementById("form-auth");
+if (formAuth) {
+  formAuth.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const emailEl = document.getElementById("auth-input-email");
+    const email = emailEl ? emailEl.value : "";
     
-    currentUser = await apiRequest("/api/auth/me");
-    updateNavbarState();
-    closeAuthModal();
+    const passwordEl = document.getElementById("auth-input-password");
+    const password = passwordEl ? passwordEl.value : "";
+    
+    const nameEl = document.getElementById("auth-input-name");
+    const name = nameEl ? nameEl.value : "";
 
-    // Check profile onboarding status
+    const errorBanner = "auth-error-banner";
+    clearErrorBanner(errorBanner);
+
+    showLoader(true, authMode === "login" ? "Connecting to your atlas..." : "Creating your atlas...");
     try {
-      await apiRequest("/api/learners/profile");
-      window.location.hash = "#dashboard";
-    } catch (profileErr) {
-      window.location.hash = "#onboarding";
+      let loginRes;
+      if (authMode === "login") {
+        loginRes = await apiRequest("/api/auth/login", "POST", { email, password });
+      } else {
+        await apiRequest("/api/auth/register", "POST", { email, password, name });
+        loginRes = await apiRequest("/api/auth/login", "POST", { email, password });
+      }
+
+      token = loginRes.access_token;
+      localStorage.setItem("token", token);
+      
+      currentUser = await apiRequest("/api/auth/me");
+      updateNavbarState();
+      closeAuthModal();
+
+      // Check profile onboarding status
+      try {
+        await apiRequest("/api/learners/profile");
+        window.location.hash = "#dashboard";
+      } catch (profileErr) {
+        window.location.hash = "#onboarding";
+      }
+    } catch (err) {
+      setErrorBanner(errorBanner, err.message || "Authentication failed. Please verify your fields.");
+    } finally {
+      showLoader(false);
     }
-  } catch (err) {
-    setErrorBanner(errorBanner, err.message || "Authentication failed. Please verify your fields.");
-  } finally {
-    showLoader(false);
-  }
-});
+  });
+}
 
 // Mobile menu navbar links toggle
-document.getElementById("btn-mobile-toggle").addEventListener("click", () => {
-  const links = document.querySelector(".site-nav .nav-links");
-  links.classList.toggle("open");
-});
+const mobileToggle = document.getElementById("btn-mobile-toggle");
+if (mobileToggle) {
+  mobileToggle.addEventListener("click", () => {
+    const links = document.querySelector(".site-nav .nav-links");
+    if (links) links.classList.toggle("open");
+  });
+}
 
 // --- HELPER ONBOARDING ERRORS BANNER ---
 function setErrorBanner(containerId, message) {
