@@ -19,18 +19,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application source
-COPY alembic.ini .
-COPY alembic/ ./alembic/
-COPY database/ ./database/
-COPY api/ ./api/
-COPY config/ ./config/
-COPY models/ ./models/
-COPY recommendation/ ./recommendation/
-COPY learning_path/ ./learning_path/
-COPY adaptive_learning/ ./adaptive_learning/
-COPY skill_gap/ ./skill_gap/
-COPY services/ ./services/
-COPY frontend/ ./frontend/
+COPY . .
 
 # Expose port
 EXPOSE 8000
