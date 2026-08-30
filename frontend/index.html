@@ -755,21 +755,35 @@
       <button id="auth-close-button" class="modal-close icon-button" aria-label="Close login" data-testid="auth-close-button">
         <i data-lucide="x" style="width: 17px; height: 17px;"></i>
       </button>
-      <div class="eyebrow eyebrow-coral">Welcome to your atlas</div>
+      
+      <!-- Auth Tabs -->
+      <div class="auth-tabs" style="display: flex; gap: 20px; border-bottom: 1px solid var(--line); margin-bottom: 25px;">
+        <button id="tab-login" class="tab-btn active" style="background: transparent; border: none; border-bottom: 2px solid var(--coral); padding: 10px 0; font-weight: 600; cursor: pointer; color: var(--ink); font-size: 15px;">Log In</button>
+        <button id="tab-register" class="tab-btn" style="background: transparent; border: none; border-bottom: 2px solid transparent; padding: 10px 0; font-weight: 600; cursor: pointer; color: var(--muted); opacity: 0.7; font-size: 15px;">Register</button>
+      </div>
+
+      <div class="eyebrow eyebrow-coral" id="auth-eyebrow">Welcome to your atlas</div>
       <h2 id="auth-modal-title">Find your way in.</h2>
       <p id="auth-modal-subtitle">Save your path and start with a clear next step.</p>
       
       <div id="auth-error-banner" class="error-banner hidden"></div>
       
       <form id="form-auth">
+        <!-- Name field (shown only on Register tab) -->
+        <div class="form-group hidden" id="auth-field-name">
+          <label for="auth-input-name">What should we call you?</label>
+          <input type="text" id="auth-input-name" placeholder="Your name" data-testid="auth-name-input">
+        </div>
+
         <div class="form-group">
           <label for="auth-input-email">Email address</label>
           <input type="email" id="auth-input-email" placeholder="you@example.com" required data-testid="auth-email-input">
         </div>
 
-        <div class="form-group" id="auth-field-name">
-          <label for="auth-input-name">What should we call you?</label>
-          <input type="text" id="auth-input-name" placeholder="Your name" data-testid="auth-name-input">
+        <!-- Password field -->
+        <div class="form-group">
+          <label for="auth-input-password">Password</label>
+          <input type="password" id="auth-input-password" placeholder="••••••••" required data-testid="auth-password-input">
         </div>
 
         <button type="submit" id="btn-auth-submit" class="button button-coral full-button" data-testid="auth-submit-button" style="margin-top: 15px;">

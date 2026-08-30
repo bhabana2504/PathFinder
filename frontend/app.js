@@ -1053,9 +1053,54 @@ document.getElementById("btn-wiz-next").addEventListener("click", async () => {
 
 
 // --- GLOBAL AUTH MODAL OVERLAY WORKFLOW ---
+let authMode = "login";
+
+function setAuthMode(mode) {
+  authMode = mode;
+  const tabLogin = document.getElementById("tab-login");
+  const tabRegister = document.getElementById("tab-register");
+  const fieldName = document.getElementById("auth-field-name");
+  const inputName = document.getElementById("auth-input-name");
+  const title = document.getElementById("auth-modal-title");
+  const subtitle = document.getElementById("auth-modal-subtitle");
+  const submitBtn = document.getElementById("btn-auth-submit");
+  
+  if (mode === "login") {
+    tabLogin.classList.add("active");
+    tabLogin.style.borderBottomColor = "var(--coral)";
+    tabLogin.style.opacity = "1";
+    tabRegister.classList.remove("active");
+    tabRegister.style.borderBottomColor = "transparent";
+    tabRegister.style.opacity = "0.7";
+    
+    fieldName.classList.add("hidden");
+    inputName.required = false;
+    title.textContent = "Welcome back.";
+    subtitle.textContent = "Access your learning path and track your milestones.";
+    submitBtn.innerHTML = `Log In to my path <i data-lucide="arrow-right" style="width: 17px; height: 17px;"></i>`;
+  } else {
+    tabRegister.classList.add("active");
+    tabRegister.style.borderBottomColor = "var(--coral)";
+    tabRegister.style.opacity = "1";
+    tabLogin.classList.remove("active");
+    tabLogin.style.borderBottomColor = "transparent";
+    tabLogin.style.opacity = "0.7";
+    
+    fieldName.classList.remove("hidden");
+    inputName.required = true;
+    title.textContent = "Create your account.";
+    subtitle.textContent = "Start mapping your skills and resources today.";
+    submitBtn.innerHTML = `Register & start my path <i data-lucide="arrow-right" style="width: 17px; height: 17px;"></i>`;
+  }
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
+}
+
 function openAuthModal() {
   const modal = document.getElementById("auth-modal");
   clearErrorBanner("auth-error-banner");
+  setAuthMode("login");
   modal.classList.remove("hidden");
   if (window.lucide) {
     window.lucide.createIcons();
@@ -1067,6 +1112,8 @@ function closeAuthModal() {
 }
 
 document.getElementById("auth-close-button").addEventListener("click", closeAuthModal);
+document.getElementById("tab-login").addEventListener("click", () => setAuthMode("login"));
+document.getElementById("tab-register").addEventListener("click", () => setAuthMode("register"));
 
 document.getElementById("btn-auth-action").addEventListener("click", () => {
   if (token) {
@@ -1094,26 +1141,23 @@ document.querySelectorAll(".btn-onboard-trigger").forEach(btn => {
   });
 });
 
-// Auth form submission (Auto-detects login or register based on credentials)
+// Auth form submission
 document.getElementById("form-auth").addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = document.getElementById("auth-input-email").value;
-  const name = document.getElementById("auth-input-name").value || "Pathfinder";
-  const password = "password123";
+  const password = document.getElementById("auth-input-password").value;
+  const name = document.getElementById("auth-input-name").value;
 
   const errorBanner = "auth-error-banner";
   clearErrorBanner(errorBanner);
 
-  showLoader(true, "Connecting to your atlas...");
+  showLoader(true, authMode === "login" ? "Connecting to your atlas..." : "Creating your atlas...");
   try {
     let loginRes;
-    try {
-      // 1. Attempt login first
+    if (authMode === "login") {
       loginRes = await apiRequest("/api/auth/login", "POST", { email, password });
-    } catch (loginErr) {
-      // 2. If login fails, user does not exist, so register them
+    } else {
       await apiRequest("/api/auth/register", "POST", { email, password, name });
-      // 3. Login immediately to get the access token
       loginRes = await apiRequest("/api/auth/login", "POST", { email, password });
     }
 
