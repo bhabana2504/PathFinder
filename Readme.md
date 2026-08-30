@@ -25,24 +25,80 @@ PathFinder AI is a closed-loop personalized curriculum agent. It connects a Pyth
 ## 🏗️ System Architecture & Data Pipelines
 
 ### 1. High-Level System Architecture
+
 ```mermaid
 graph TD
-    Client[HTML5 SPA Browser Client] <-->|JSON REST APIs / Bearer JWT| API[FastAPI Web Server]
+    %% Styling
+    classDef client fill:#e87559,stroke:#17352f,stroke-width:2px,color:#fff;
+    classDef api fill:#20867d,stroke:#17352f,stroke-width:2px,color:#fff;
+    classDef engine fill:#e7ba55,stroke:#17352f,stroke-width:2px,color:#17352f;
+    classDef data fill:#f7f6f1,stroke:#17352f,stroke-width:2px,color:#17352f;
+    classDef infrastructure fill:#94cfc4,stroke:#17352f,stroke-width:2px,color:#17352f;
+
+    subgraph Client_Presentation_Layer ["Presentation Layer (Frontend SPA)"]
+        UI["HTML5 / CSS3 / ES6 Single Page Application"]
+        Router["Client Hash Router (app.js)"]
+        Views["Views: Discover, Careers, Skills, Resources, Dashboard, Onboarding"]
+        SVG["Zero-Dependency SVG Chart Generator"]
+        UI --> Router
+        Router --> Views
+        Views --> SVG
+    end
     
-    subgraph Backend Core Service Layer
-        API <--> Auth[Auth & Session Guard]
-        API <--> Gap[Skill Gap Analyzer]
-        API <--> Rec[Recommendation Ranker]
-        API <--> Path[Prerequisite Path Generator]
-        API <--> Adap[Adaptive Assessment Loop]
+    subgraph API_Gateway_Layer ["API Gateway & Controller Layer"]
+        FastAPI["FastAPI App Instance (api/main.py)"]
+        Pydantic["Pydantic schemas Validation (api/schemas)"]
+        AuthGuard["JWT Authenticated Session Guard (api/auth.py)"]
+        FastAPI <--> Pydantic
+        FastAPI <--> AuthGuard
     end
 
-    subgraph Storage Layer
-        Gap <--> DB[(SQLAlchemy SQLite/Postgres)]
-        Rec <--> DB
-        Path <--> DB
-        Adap <--> DB
+    subgraph Business_Engine_Layer ["Business Logic & Agent Engines"]
+        GapEngine["Skill Gap Analyzer (skill_gap/analyzer.py)"]
+        RecEngine["Recommendation Ranker (recommendation/recommender.py)"]
+        PathEngine["Prerequisite Roadmap Sort (learning_path/generator.py)"]
+        AdaptiveEngine["Adaptive assessment updater (adaptive_learning/updater.py)"]
     end
+
+    subgraph Data_Persistence_Layer ["Data Access & Storage Layer"]
+        ORM["SQLAlchemy ORM Connection Pool (database/connection.py)"]
+        CRUD["Database Transaction Queries (database/crud.py)"]
+        Migrations["Alembic Migrations Schemas (alembic/)"]
+        Seeder["Dataset Initializer (database/seed.py)"]
+        SQLite[("Local SQLite Development (pathfinder.db)")]
+        Postgres[("PostgreSQL Production Database")]
+        
+        ORM --> CRUD
+        Migrations --> SQLite
+        Seeder --> SQLite
+        CRUD --> SQLite
+        CRUD --> Postgres
+    end
+
+    subgraph DevOps_Automation ["DevOps & Pipeline Automation"]
+        Docker["Docker Image (Dockerfile)"]
+        Compose["Docker Compose Orchestrator"]
+        CI["GitHub Actions Workflows (ci.yml)"]
+    end
+
+    %% Routing lines
+    UI <-->|HTTP / JSON / Bearer Token| FastAPI
+    
+    FastAPI <--> GapEngine
+    FastAPI <--> RecEngine
+    FastAPI <--> PathEngine
+    FastAPI <--> AdaptiveEngine
+    
+    GapEngine <--> ORM
+    RecEngine <--> ORM
+    PathEngine <--> ORM
+    AdaptiveEngine <--> ORM
+
+    class UI,Router,Views,SVG client;
+    class FastAPI,Pydantic,AuthGuard api;
+    class GapEngine,RecEngine,PathEngine,AdaptiveEngine engine;
+    class ORM,CRUD,Migrations,Seeder,SQLite,Postgres data;
+    class Docker,Compose,CI infrastructure;
 ```
 
 ### 2. Adaptive Agent & Learning Pipeline
@@ -57,6 +113,30 @@ graph TD
     Dashboard -->|Submit Mock Quiz| Assessment[Adaptive Assessment Engine]
     Assessment -->|Recalculate Proficiencies| DB
 ```
+
+---
+
+## 🛠️ Technical Stack
+
+*   **🎨 Frontend (Single Page Application)**:
+    *   **Vanilla JS (ES6+)**: Custom dynamic client router and template renderer. Using vanilla JS keeps the bundle size at near-zero, enabling sub-millisecond page transitions without framework overhead.
+    *   **Tailwind CSS & Custom Flex/Grid Styles**: For high-fidelity editorial responsive layout structures.
+    *   **Custom SVG Renderer**: Custom drawing routines to render comparison grids and circular progress rings directly in the DOM, eliminating the need for bulky third-party charting libraries.
+    *   **Lucide Icons & Web Fonts**: Renders premium typography (`Playfair Display` for editorial headings, `DM Sans` for body, `DM Mono` for metadata stats).
+*   **⚙️ Backend (REST APIs)**:
+    *   **FastAPI (Python 3.12)**: A modern, high-performance, asynchronous web framework for building APIs with Python.
+    *   **Pydantic v2**: Handles request payload parsing and response serialization with strict type safety.
+    *   **SQLAlchemy ORM**: For database modeling and querying.
+    *   **PyJWT & Passlib**: Encodes and decodes secure JSON Web Tokens for session handling.
+*   **💾 Database & Migrations**:
+    *   **SQLite**: Serves as the default local development database (stored in `pathfinder.db`).
+    *   **PostgreSQL**: Configured in production and containerized environments.
+    *   **Alembic**: Database schema migration controller to manage, version, and apply schema updates.
+*   **🐳 DevOps & Testing**:
+    *   **Docker**: Packages the FastAPI backend and frontend assets inside a unified application image.
+    *   **Docker Compose**: Automatically provisions PostgreSQL and mounts the web application.
+    *   **Pytest**: Integration and unit testing suite with 47 automated test assertions.
+    *   **GitHub Actions**: CI pipeline (`ci.yml`) validating all code changes on every commit.
 
 ---
 
