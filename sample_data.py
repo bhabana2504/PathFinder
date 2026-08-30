@@ -4,7 +4,7 @@ Sample data for development and testing.
 This module provides realistic sample learner profiles, skills, and resources.
 """
 
-from pathfinder_ai.models import (
+from models import (
     LearnerProfile,
     LearningResource,
     ResourceType,

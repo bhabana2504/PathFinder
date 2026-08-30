@@ -10,7 +10,7 @@ Currently provides a no-op implementation that can be extended.
 
 from abc import ABC, abstractmethod
 from typing import Dict, Optional
-from pathfinder_ai.models import LearnerProfile
+from models import LearnerProfile
 
 
 class AIService(ABC):

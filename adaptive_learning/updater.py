@@ -1,7 +1,7 @@
 """Adaptive learning profile updates."""
 
 from typing import Dict, Optional
-from pathfinder_ai.models import LearnerProfile
+from models import LearnerProfile
 
 
 def update_skill_from_assessment(

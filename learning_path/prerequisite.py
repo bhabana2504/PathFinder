@@ -2,8 +2,8 @@
 
 from typing import Dict, List, Set, Tuple
 from collections import defaultdict, deque
-from pathfinder_ai.models import LearningResource
-from pathfinder_ai.config import get_skill_prerequisites
+from models import LearningResource
+from config import get_skill_prerequisites
 
 
 class PrerequisiteEngine:

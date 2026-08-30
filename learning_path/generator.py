@@ -2,13 +2,13 @@
 
 from typing import Dict, List
 from dataclasses import dataclass
-from pathfinder_ai.models import (
+from models import (
     LearnerProfile,
     LearningResource,
     SkillGapResult,
     Recommendation,
 )
-from pathfinder_ai.learning_path.prerequisite import PrerequisiteEngine
+from learning_path.prerequisite import PrerequisiteEngine
 
 
 @dataclass

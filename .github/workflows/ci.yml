@@ -1,0 +1,66 @@
+name: PathFinder AI CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - developers
+      - feature/*
+  pull_request:
+    branches:
+      - main
+      - developers
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: pathfinder_user
+          POSTGRES_PASSWORD: pathfinder_secure_password
+          POSTGRES_DB: pathfinder_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest httpx
+
+      - name: Verify static files path exists
+        run: |
+          test -f frontend/index.html
+          test -f frontend/app.js
+          test -f frontend/styles.css
+
+      - name: Run Alembic migrations upgrade check
+        env:
+          DATABASE_URL: sqlite:///test_ci.db
+        run: |
+          alembic upgrade head
+
+      - name: Run Test Suite
+        env:
+          DATABASE_URL: sqlite:///test_ci.db
+          JWT_SECRET: test_ci_secret_key_jwt
+        run: |
+          python -m pytest tests -v

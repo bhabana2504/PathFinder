@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: pathfinder_db
+    restart: always
+    environment:
+      POSTGRES_USER: pathfinder_user
+      POSTGRES_PASSWORD: pathfinder_secure_password
+      POSTGRES_DB: pathfinder
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pathfinder_user -d pathfinder"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    container_name: pathfinder_app
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://pathfinder_user:pathfinder_secure_password@db:5432/pathfinder
+      - JWT_SECRET=supersecretjwttokendesignkey
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

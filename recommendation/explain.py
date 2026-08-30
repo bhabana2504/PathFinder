@@ -1,13 +1,13 @@
 """Explanation generator for recommendations."""
 
 from typing import Dict, List
-from pathfinder_ai.models import (
+from models import (
     LearnerProfile,
     LearningResource,
     SkillGapResult,
     PrerequisiteStatus,
 )
-from pathfinder_ai.skill_gap.scorer import SkillPriorityScorer
+from skill_gap.scorer import SkillPriorityScorer
 
 
 class ExplanationGenerator:

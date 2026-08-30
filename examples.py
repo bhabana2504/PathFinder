@@ -16,19 +16,19 @@ from pathlib import Path
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent))
 
-from pathfinder_ai import (
+from __init__ import (
     LearnerProfile,
     analyze_skill_gap,
     recommend_resources,
     generate_learning_path,
     update_learner_profile,
 )
-from pathfinder_ai.sample_data import (
+from sample_data import (
     SAMPLE_LEARNER_BEGINNER,
     SAMPLE_RESOURCES,
     get_sample_resources_for_skill,
 )
-from pathfinder_ai.adaptive_learning import (
+from adaptive_learning import (
     update_skill_from_assessment,
     ProgressAnalyzer,
 )
@@ -344,7 +344,7 @@ def example_5_custom_configuration():
     """Example 5: Using custom scoring weights."""
     print_section("EXAMPLE 5: Custom Scoring Weights")
     
-    from pathfinder_ai.recommendation.ranker import ScoringWeights
+    from recommendation.ranker import ScoringWeights
     
     profile = SAMPLE_LEARNER_BEGINNER
     gap = analyze_skill_gap(profile)

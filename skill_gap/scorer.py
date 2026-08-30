@@ -2,7 +2,7 @@
 
 from typing import Dict, Tuple
 from dataclasses import dataclass
-from pathfinder_ai.skill_gap.career_mapping import CareerSkillMapper
+from skill_gap.career_mapping import CareerSkillMapper
 
 
 @dataclass

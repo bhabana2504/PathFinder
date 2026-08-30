@@ -1,7 +1,7 @@
 """Career-to-skill mapping logic."""
 
 from typing import List, Dict, Set
-from pathfinder_ai.config import get_career_skills, get_skill_prerequisites, SKILL_DEFINITIONS
+from config import get_career_skills, get_skill_prerequisites, SKILL_DEFINITIONS
 
 
 class CareerSkillMapper:

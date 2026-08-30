@@ -1,9 +1,9 @@
 """Main skill gap analyzer."""
 
 from typing import Dict
-from pathfinder_ai.models import LearnerProfile, SkillGapResult
-from pathfinder_ai.skill_gap.career_mapping import CareerSkillMapper
-from pathfinder_ai.skill_gap.scorer import SkillPriorityScorer
+from models import LearnerProfile, SkillGapResult
+from skill_gap.career_mapping import CareerSkillMapper
+from skill_gap.scorer import SkillPriorityScorer
 
 
 def analyze_skill_gap(profile: LearnerProfile) -> SkillGapResult:
@@ -80,7 +80,28 @@ def analyze_skill_gap(profile: LearnerProfile) -> SkillGapResult:
         )
         
         skill_scores[skill] = score
-        gap_analysis[skill] = breakdown.to_dict()
+        
+        current_prof = profile.get_skill_proficiency(skill)
+        target_prof = 0.8
+        gap_val = max(0.0, target_prof - current_prof)
+        
+        if score >= 0.5:
+            priority_val = "critical"
+        elif score >= 0.3:
+            priority_val = "high"
+        elif score >= 0.1:
+            priority_val = "medium"
+        else:
+            priority_val = "low"
+            
+        analysis_dict = breakdown.to_dict()
+        analysis_dict.update({
+            "current": current_prof,
+            "required": target_prof,
+            "gap": gap_val,
+            "priority": priority_val
+        })
+        gap_analysis[skill] = analysis_dict
     
     # Rank skills by priority
     priority_skills = sorted(

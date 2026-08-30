@@ -1,15 +1,15 @@
 """Main recommendation engine."""
 
 from typing import List
-from pathfinder_ai.models import (
+from models import (
     LearnerProfile,
     LearningResource,
     SkillGapResult,
     Recommendation,
     RecommendationResult,
 )
-from pathfinder_ai.recommendation.ranker import ResourceRanker, ScoringWeights
-from pathfinder_ai.recommendation.explain import ExplanationGenerator
+from recommendation.ranker import ResourceRanker, ScoringWeights
+from recommendation.explain import ExplanationGenerator
 
 
 def recommend_resources(

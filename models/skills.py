@@ -1,7 +1,7 @@
 """Skill data model."""
 
 from typing import List
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from enum import Enum
 
 
@@ -47,8 +47,8 @@ class Skill(BaseModel):
         description="List of related skill names"
     )
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "name": "Python",
                 "category": "programming",
@@ -58,6 +58,7 @@ class Skill(BaseModel):
                 "related_skills": ["JavaScript", "C++"]
             }
         }
+    )
 
     def has_prerequisites(self) -> bool:
         """Check if skill has prerequisites."""

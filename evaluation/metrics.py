@@ -2,7 +2,7 @@
 
 from typing import Dict, List, Set
 from dataclasses import dataclass
-from pathfinder_ai.models import Recommendation, SkillGapResult
+from models import Recommendation, SkillGapResult
 
 
 @dataclass

@@ -37,17 +37,17 @@ __version__ = "0.1.0"
 __author__ = "Bhabana Kalita"
 __description__ = "AI/ML module for PathFinder personalized learning platform"
 
-from pathfinder_ai.models import (
+from models import (
     LearnerProfile,
     Skill,
     LearningResource,
     Recommendation,
     SkillGapResult,
 )
-from pathfinder_ai.skill_gap import analyze_skill_gap
-from pathfinder_ai.recommendation import recommend_resources
-from pathfinder_ai.learning_path import generate_learning_path
-from pathfinder_ai.adaptive_learning import update_learner_profile
+from skill_gap import analyze_skill_gap
+from recommendation import recommend_resources
+from learning_path import generate_learning_path
+from adaptive_learning import update_learner_profile
 
 __all__ = [
     "LearnerProfile",

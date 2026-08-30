@@ -2,7 +2,7 @@
 
 from typing import Dict, List, Tuple
 from dataclasses import dataclass
-from pathfinder_ai.models import LearnerProfile
+from models import LearnerProfile
 
 
 @dataclass

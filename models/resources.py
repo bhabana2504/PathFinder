@@ -1,7 +1,7 @@
 """Learning resource data model."""
 
 from typing import List, Optional
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field, HttpUrl, ConfigDict
 from enum import Enum
 
 
@@ -82,8 +82,8 @@ class LearningResource(BaseModel):
         description="Estimated completion rate"
     )
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "resource_id": "ml101",
                 "title": "Machine Learning Fundamentals",
@@ -101,6 +101,7 @@ class LearningResource(BaseModel):
                 "completion_rate": 0.75
             }
         }
+    )
 
     def has_prerequisites(self) -> bool:
         """Check if resource has prerequisites."""

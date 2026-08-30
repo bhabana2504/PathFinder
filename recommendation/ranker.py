@@ -3,14 +3,14 @@
 from typing import Dict, List, Tuple
 from dataclasses import dataclass
 
-from pathfinder_ai.models import (
+from models import (
     LearnerProfile,
     LearningResource,
     SkillGapResult,
     PrerequisiteStatus,
 )
 
-from pathfinder_ai.skill_gap.career_mapping import CareerSkillMapper
+from skill_gap.career_mapping import CareerSkillMapper
 
 
 @dataclass

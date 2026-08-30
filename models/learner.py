@@ -1,8 +1,8 @@
 """Learner profile data model."""
 
 from typing import Dict, List, Optional
-from pydantic import BaseModel, Field
-from datetime import datetime
+from pydantic import BaseModel, Field, ConfigDict
+from datetime import datetime, timezone
 
 
 class LearnerProfile(BaseModel):
@@ -50,16 +50,16 @@ class LearnerProfile(BaseModel):
         description="User feedback on recommendations and resources"
     )
     created_at: datetime = Field(
-        default_factory=datetime.utcnow,
+        default_factory=lambda: datetime.now(timezone.utc),
         description="Profile creation timestamp"
     )
     updated_at: datetime = Field(
-        default_factory=datetime.utcnow,
+        default_factory=lambda: datetime.now(timezone.utc),
         description="Last profile update timestamp"
     )
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "user_id": "learner_123",
                 "career_goal": "AI Engineer",
@@ -78,6 +78,7 @@ class LearnerProfile(BaseModel):
                 "feedback": []
             }
         }
+    )
 
     def copy(self, *, include=None, exclude=None, update=None, deep=True):
         """Return a copy of the model, defaulting to deep copy to avoid shared nested dictionary state."""

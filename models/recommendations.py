@@ -1,7 +1,7 @@
 """Recommendation and analysis result models."""
 
-from typing import List, Dict, Optional
-from pydantic import BaseModel, Field
+from typing import List, Dict, Optional, Any
+from pydantic import BaseModel, Field, ConfigDict
 from enum import Enum
 
 
@@ -51,13 +51,13 @@ class SkillGapResult(BaseModel):
         description="Skills ranked by priority (highest first)"
     )
     
-    gap_analysis: Dict[str, Dict[str, float]] = Field(
+    gap_analysis: Dict[str, Dict[str, Any]] = Field(
         default_factory=dict,
         description="Detailed analysis for each skill"
     )
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "user_id": "learner_123",
                 "career_goal": "AI Engineer",
@@ -75,6 +75,7 @@ class SkillGapResult(BaseModel):
                 "gap_analysis": {}
             }
         }
+    )
 
 
 class Recommendation(BaseModel):
@@ -148,8 +149,8 @@ class Recommendation(BaseModel):
         description="Component scores contributing to final score"
     )
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "resource_id": "ml101",
                 "title": "Machine Learning Fundamentals",
@@ -177,6 +178,7 @@ class Recommendation(BaseModel):
                 }
             }
         }
+    )
 
 
 class RecommendationResult(BaseModel):
@@ -207,8 +209,8 @@ class RecommendationResult(BaseModel):
         description="Average recommendation score"
     )
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "user_id": "learner_123",
                 "career_goal": "AI Engineer",
@@ -218,3 +220,4 @@ class RecommendationResult(BaseModel):
                 "average_score": 0.87
             }
         }
+    )

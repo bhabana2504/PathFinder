@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PathFinder — Career Mapping & Personalized Learning</title>
+  <link rel="stylesheet" href="/styles.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <!-- Notification Toast -->
+  <div id="notification-toast" class="toast hidden"></div>
+
+  <!-- Global Loader -->
+  <div id="global-loader" class="loader-overlay hidden">
+    <div class="spinner"></div>
+    <p id="loader-text">Loading...</p>
+  </div>
+
+  <div class="app-shell">
+    <!-- Top Site Navigation Header -->
+    <header class="site-nav" data-testid="site-navigation">
+      <a href="#discover" class="brand" data-testid="brand-link">
+        <span class="brand-mark"><i data-lucide="orbit" style="width: 18px; height: 18px;"></i></span>
+        <span>PATHFINDER <b>AI</b></span>
+      </a>
+      
+      <!-- Nav Links -->
+      <nav class="nav-links" data-testid="primary-navigation">
+        <a href="#discover" class="nav-item active" data-view="discover" data-testid="nav-discover-link">Discover</a>
+        <a href="#careers" class="nav-item" data-view="careers" data-testid="nav-careers-link">Careers</a>
+        <a href="#skills" class="nav-item" data-view="skills" data-testid="nav-skills-link">Skills</a>
+        <a href="#resources" class="nav-item" data-view="resources" data-testid="nav-resources-link">Resources</a>
+        <a href="#progress" class="nav-item" data-view="progress" data-testid="nav-progress-link">Progress</a>
+        <a href="#dashboard" class="nav-item" data-view="dashboard" id="nav-dashboard-link" data-testid="nav-dashboard-link">My path</a>
+      </nav>
+
+      <!-- Nav Actions -->
+      <div class="nav-actions">
+        <button id="btn-auth-action" class="text-button desktop-only" data-testid="nav-auth-button">Log in</button>
+        <a id="btn-cta-action" class="button button-coral nav-cta desktop-only" href="#login" data-testid="nav-build-path-button">
+          Build my path <i data-lucide="arrow-right" style="width: 15px; height: 15px;"></i>
+        </a>
+        <button id="btn-mobile-toggle" class="icon-button mobile-menu" aria-label="Toggle navigation" data-testid="mobile-menu-button">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Dynamic Views Wrapper -->
+    <main id="view-content">
+
+      <!-- 1. Discover View (Landing Page) -->
+      <section id="view-discover" class="view">
+        <section class="hero section-dark">
+          <div class="hero-copy reveal">
+            <div class="eyebrow">
+              <span class="eyebrow-dot"></span> Career learning, reimagined
+            </div>
+            <h1 data-testid="hero-heading">Find your path.<br><em>Build your future.</em></h1>
+            <p data-testid="hero-subheading">
+              PathFinder turns your skills, goals, and available time into a living learning journey—curated by AI, made for you.
+            </p>
+            <div class="hero-actions">
+              <button class="button button-coral btn-onboard-trigger" data-testid="hero-build-path-button">
+                Build my path <i data-lucide="arrow-right" style="width: 17px; height: 17px;"></i>
+              </button>
+              <a class="button button-outline" href="#careers" data-testid="hero-explore-careers-link">
+                Explore careers <i data-lucide="compass" style="width: 16px; height: 16px;"></i>
+              </a>
+            </div>
+            <div class="hero-note">
+              <span class="pulse-dot"></span>
+              <span data-ve-dynamic="true" data-testid="api-status">PathFinder systems online</span>
+            </div>
+          </div>
+          
+          <div class="career-world" data-testid="career-world">
+            <div class="world-grid"></div>
+            <div class="world-core">
+              <span class="core-ring ring-one"></span>
+              <span class="core-ring ring-two"></span>
+              <div class="core-label">
+                <i data-lucide="sparkles" style="width: 15px; height: 15px;"></i>
+                <strong>PathFinder</strong>
+                <small>your career atlas</small>
+              </div>
+            </div>
+            <div class="world-node node-0"><span>Career</span></div>
+            <div class="world-node node-1"><span>Skills</span></div>
+            <div class="world-node node-2"><span>Resources</span></div>
+            <div class="world-node node-3"><span>Progress</span></div>
+            <div class="world-node node-4"><span>AI</span></div>
+            <div class="world-caption">
+              <span>01 / 05</span>
+              <span>Drag to explore your universe</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Metrics bar -->
+        <section class="metrics band-light" data-testid="platform-metrics">
+          <div class="metric" data-testid="metric-career-paths-mapped">
+            <strong>50+</strong>
+            <span>career paths mapped</span>
+          </div>
+          <div class="metric" data-testid="metric-skills-in-the-atlas">
+            <strong>500+</strong>
+            <span>skills in the atlas</span>
+          </div>
+          <div class="metric" data-testid="metric-resources-to-explore">
+            <strong>10k+</strong>
+            <span>resources to explore</span>
+          </div>
+          <div class="metric" data-testid="metric-recommendations-that-adapt">
+            <strong>AI</strong>
+            <span>recommendations that adapt</span>
+          </div>
+        </section>
+
+        <!-- Career cards preview -->
+        <section class="section section-paper" id="discover-careers">
+          <div class="section-intro">
+            <div>
+              <div class="eyebrow eyebrow-teal">Choose a direction</div>
+              <h2 data-testid="section-heading-what-could-you-become?">What could you become?</h2>
+            </div>
+            <div class="intro-side">
+              <p>Start with a destination. PathFinder makes the distance between today and there feel navigable.</p>
+              <a class="arrow-link" href="#careers" data-testid="section-link-browse-all-careers">
+                Browse all careers <i data-lucide="arrow-right" style="width: 15px; height: 15px;"></i>
+              </a>
+            </div>
+          </div>
+          <div id="discover-careers-grid" class="career-grid">
+            <!-- Populated dynamically -->
+          </div>
+        </section>
+
+        <!-- How it works steps -->
+        <section class="section section-dark how">
+          <div class="section-intro">
+            <div>
+              <div class="eyebrow eyebrow-teal">A simpler way forward</div>
+              <h2>The path is personal.</h2>
+            </div>
+            <div class="intro-side">
+              <p>No two journeys begin in the same place. Four steps are all it takes to make yours visible.</p>
+            </div>
+          </div>
+          <div class="steps">
+            <div class="step" data-testid="how-step-01">
+              <span class="step-num">01</span>
+              <i data-lucide="target" style="width: 25px; height: 25px; color: var(--coral);"></i>
+              <h3>Name your destination</h3>
+              <p>Tell us the role, industry, or kind of work that makes you curious.</p>
+            </div>
+            <div class="step" data-testid="how-step-02">
+              <span class="step-num">02</span>
+              <i data-lucide="layers" style="width: 25px; height: 25px; color: var(--coral);"></i>
+              <h3>Show your starting point</h3>
+              <p>Your skills and experience become the coordinates on the map.</p>
+            </div>
+            <div class="step" data-testid="how-step-03">
+              <span class="step-num">03</span>
+              <i data-lucide="brain" style="width: 25px; height: 25px; color: var(--coral);"></i>
+              <h3>See what’s missing</h3>
+              <p>PathFinder finds the gaps that matter most for where you want to go.</p>
+            </div>
+            <div class="step" data-testid="how-step-04">
+              <span class="step-num">04</span>
+              <i data-lucide="zap" style="width: 25px; height: 25px; color: var(--coral);"></i>
+              <h3>Follow your path</h3>
+              <p>A focused sequence of resources turns momentum into mastery.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Skill Orb Preview -->
+        <section class="section skill-band">
+          <div class="skill-orb" data-testid="skill-orb">
+            <div class="orb-lines"></div>
+            <span class="orb-chip chip-a">Python</span>
+            <span class="orb-chip chip-b">RAG</span>
+            <span class="orb-chip chip-c">SQL</span>
+            <span class="orb-chip chip-d">Cloud</span>
+            <div class="orb-center">
+              <i data-lucide="brain" style="width: 25px; height: 25px;"></i>
+              <small>your skills</small>
+            </div>
+          </div>
+          <div class="skill-copy">
+            <div class="eyebrow eyebrow-coral">See the distance</div>
+            <h2 data-testid="skill-preview-heading">A map of<br><em>what’s next.</em></h2>
+            <p>Understand your current level, the target for your chosen career, and exactly which skill deserves your attention first.</p>
+            <a class="arrow-link" href="#skills" data-testid="skill-preview-link">
+              Explore skill gaps <i data-lucide="arrow-right" style="width: 15px; height: 15px;"></i>
+            </a>
+          </div>
+        </section>
+
+        <!-- AI Curator Flow -->
+        <section class="section section-teal curator">
+          <div class="section-intro">
+            <div>
+              <div class="eyebrow eyebrow-teal" style="color: #d8eee2;">Your AI curator</div>
+              <h2 style="color: white;">Less searching. More becoming.</h2>
+            </div>
+            <div class="intro-side">
+              <p>PathFinder reads the shape of your goal and connects it to resources with a reason to be there.</p>
+            </div>
+          </div>
+          <div class="curator-flow">
+            <div class="flow-node" data-testid="flow-node-your-goal">
+              <div><i data-lucide="target" style="width: 20px; height: 20px;"></i></div>
+              <span>Your goal</span>
+            </div>
+            <span class="flow-line"></span>
+            <div class="flow-node" data-testid="flow-node-skill-gaps">
+              <div><i data-lucide="bar-chart-2" style="width: 20px; height: 20px;"></i></div>
+              <span>Skill gaps</span>
+            </div>
+            <span class="flow-line"></span>
+            <div class="flow-node" data-testid="flow-node-semantic-search">
+              <div><i data-lucide="search" style="width: 20px; height: 20px;"></i></div>
+              <span>Semantic search</span>
+            </div>
+            <span class="flow-line"></span>
+            <div class="flow-node" data-testid="flow-node-your-picks">
+              <div><i data-lucide="sparkles" style="width: 20px; height: 20px;"></i></div>
+              <span>Your picks</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Recommended Shelf preview -->
+        <section class="section section-paper">
+          <div class="section-intro">
+            <div>
+              <div class="eyebrow eyebrow-teal">Picked for your path</div>
+              <h2>A better resource shelf.</h2>
+            </div>
+            <div class="intro-side">
+              <p>Courses, books, projects, and challenges arranged around your next meaningful step.</p>
+              <a class="arrow-link" href="#resources" data-testid="section-link-open-resource-library">
+                Open resource library <i data-lucide="arrow-right" style="width: 15px; height: 15px;"></i>
+              </a>
+            </div>
+          </div>
+          <div id="discover-resources-grid" class="resource-grid">
+            <!-- Populated dynamically -->
+          </div>
+        </section>
+
+        <!-- Roadmap preview -->
+        <section class="section roadmap-preview">
+          <div class="roadmap-copy">
+            <div class="eyebrow eyebrow-gold">Your learning path</div>
+            <h2 data-testid="roadmap-preview-heading">Make progress<br><em>visible.</em></h2>
+            <p>A roadmap that shows what’s done, what’s next, and why the next step matters.</p>
+            <a class="arrow-link" href="#roadmap" data-testid="roadmap-preview-link">
+              See the full roadmap <i data-lucide="arrow-right" style="width: 15px; height: 15px;"></i>
+            </a>
+          </div>
+          <div id="discover-roadmap-preview" class="mini-roadmap" data-testid="mini-roadmap">
+            <!-- Mini nodes populated dynamically -->
+          </div>
+        </section>
+
+        <!-- Closing CTA -->
+        <section class="closing section-dark">
+          <div class="closing-orbit">
+            <i data-lucide="orbit" style="width: 190px; height: 190px; stroke-width: 0.7px;"></i>
+          </div>
+          <div>
+            <div class="eyebrow"><span class="eyebrow-dot"></span> Your next chapter</div>
+            <h2 data-testid="closing-heading">Start where<br><em>you are.</em></h2>
+            <button class="button button-coral btn-onboard-trigger" data-testid="closing-build-path-button">
+              Build my path <i data-lucide="arrow-right" style="width: 17px; height: 17px;"></i>
+            </button>
+          </div>
+        </section>
+      </section>
+
+
+      <!-- 2. Careers Explorer View -->
+      <section id="view-careers" class="view hidden">
+        <main class="page-frame">
+          <div class="page-hero">
+            <div class="eyebrow eyebrow-teal">Career atlas</div>
+            <h1 data-testid="page-heading">Choose a direction.</h1>
+            <p data-testid="page-description">
+              Explore the paths people take to build useful things, solve hard problems, and keep learning.
+            </p>
+          </div>
+
+          <div class="explorer-toolbar">
+            <span id="career-count" data-testid="career-count">Loading paths...</span>
+            <button class="filter-button" data-testid="career-filter-button">
+              Filter <i data-lucide="chevron-down" style="width: 15px; height: 15px;"></i>
+            </button>
+          </div>
+
+          <div id="careers-explorer-grid" class="career-grid explorer-grid">
+            <!-- Populated dynamically with dynamic career cards -->
+          </div>
+
+          <!-- Comparison strip -->
+          <div class="comparison-strip">
+            <div>
+              <div class="eyebrow eyebrow-teal">Compare paths</div>
+              <h2>Same ambition.<br><em>Different terrain.</em></h2>
+            </div>
+            <div id="compare-bars-container" class="compare-bars">
+              <!-- Dynamically populated skill comparing bars -->
+            </div>
+          </div>
+        </main>
+      </section>
+
+
+      <!-- 3. Skill Gaps Analysis View -->
+      <section id="view-skills" class="view hidden">
+        <main class="page-frame">
+          <div class="page-hero">
+            <div class="eyebrow eyebrow-teal">Skill gap analysis</div>
+            <h1>See what’s missing.</h1>
+            <p>Your gaps aren’t a verdict. They’re a sequence of next steps.</p>
+          </div>
+
+          <div class="skills-layout">
+            <!-- Left side: Main Analytics -->
+            <div class="skills-main">
+              <div class="analytics-head">
+                <span>Current vs required</span>
+                <span>
+                  <i class="legend current"></i> Current 
+                  <i class="legend target"></i> Target
+                </span>
+              </div>
+              <div id="skills-rows-container">
+                <!-- Dynamically populated list of skill rows -->
+              </div>
+            </div>
+
+            <!-- Right side: Readiness Card -->
+            <div class="readiness">
+              <div class="readiness-ring">
+                <span id="readiness-value-text">0<small>%</small></span>
+              </div>
+              <div class="eyebrow eyebrow-coral">Career readiness</div>
+              <h3>Building momentum</h3>
+              <p>Close your critical gaps to unlock your next recommended milestone projects.</p>
+            </div>
+          </div>
+
+          <!-- Skill priority checklist -->
+          <div class="priority-list">
+            <div class="eyebrow eyebrow-teal">Learn first</div>
+            <h2>What should you learn first?</h2>
+            <div id="skills-priority-items-container">
+              <!-- Dynamically populated items sorted by score -->
+            </div>
+          </div>
+        </main>
+      </section>
+
+
+      <!-- 4. Resource Library View -->
+      <section id="view-resources" class="view hidden">
+        <main class="page-frame">
+          <div class="page-hero">
+            <div class="eyebrow eyebrow-teal">Resource library</div>
+            <h1>Find your next unlock.</h1>
+            <p>A curated shelf of books, courses, tutorials, and projects—ranked by relevance to your path.</p>
+          </div>
+
+          <div class="library-toolbar">
+            <div class="search-box">
+              <i data-lucide="search" style="width: 17px; height: 17px;"></i>
+              <input type="text" id="resource-search-input" placeholder="Search skills, resources..." data-testid="resource-search-input">
+            </div>
+
+            <!-- Filter Controls -->
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+              <select id="filter-skill-select" class="filter-button" style="padding: 8px; font-size: 11px;">
+                <option value="">All Skills</option>
+              </select>
+              <select id="filter-difficulty-select" class="filter-button" style="padding: 8px; font-size: 11px;">
+                <option value="">All Difficulties</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
+              <select id="sort-relevance-select" class="filter-button" style="padding: 8px; font-size: 11px;" data-testid="resource-sort-button">
+                <option value="match">Most relevant</option>
+                <option value="duration">Shortest duration</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="resources-library-grid" class="resource-grid library-grid">
+            <!-- Populated dynamically with resource shelf cards -->
+          </div>
+
+          <div id="library-empty-state" class="empty-state hidden" data-testid="resource-empty-state">
+            <i data-lucide="sparkles" style="width: 26px; height: 26px;"></i>
+            <h3>No resources found</h3>
+            <p>Try a broader search or adjust filters to find your next unlock.</p>
+          </div>
+        </main>
+      </section>
+
+
+      <!-- 5. Learning Path Roadmap View -->
+      <section id="view-roadmap" class="view hidden">
+        <main class="page-frame">
+          <div class="page-hero">
+            <div class="eyebrow eyebrow-teal">Learning roadmap</div>
+            <h1>Your path, in sequence.</h1>
+            <p>A living route from your current skills to the work you want to do.</p>
+          </div>
+
+          <div id="roadmap-timeline-container" class="full-roadmap" data-testid="full-roadmap">
+            <!-- Topologically sorted nodes populated dynamically -->
+          </div>
+        </main>
+      </section>
+
+
+      <!-- 6. Progress Story View -->
+      <section id="view-progress" class="view hidden">
+        <main class="page-frame">
+          <div class="page-hero">
+            <div class="eyebrow eyebrow-teal">Progress story</div>
+            <h1>Make the work visible.</h1>
+            <p>Small sessions compound. Here’s the shape your learning is taking.</p>
+          </div>
+
+          <!-- Progress Highlights -->
+          <div class="progress-overview">
+            <div class="progress-highlight" data-testid="progress-highlight-0">
+              <div class="eyebrow eyebrow-coral">This month</div>
+              <strong id="progress-hours-completed">18.5h</strong>
+              <span>learning time</span>
+              <div class="progress-delta">
+                <i data-lucide="arrow-right" style="width: 13px; height: 13px;"></i> 24% more than last month
+              </div>
+            </div>
+            <div class="progress-highlight" data-testid="progress-highlight-1">
+              <div class="eyebrow eyebrow-coral">Resources</div>
+              <strong id="progress-completed-count">12</strong>
+              <span>resources completed</span>
+              <div class="progress-delta">
+                <i data-lucide="check" style="width: 13px; height: 13px;"></i> 3 skills improved
+              </div>
+            </div>
+            <div class="progress-highlight highlight-ink" data-testid="progress-highlight-2">
+              <div class="eyebrow eyebrow-coral">Streak</div>
+              <strong id="progress-streak-count">14</strong>
+              <span>days in motion</span>
+              <div class="progress-delta">
+                <i data-lucide="arrow-right" style="width: 13px; height: 13px;"></i> Keep the thread going
+              </div>
+            </div>
+          </div>
+
+          <!-- Heatmap calendar and Milestones -->
+          <div class="progress-panels">
+            <div class="progress-panel heatmap-panel">
+              <div class="panel-heading">
+                <div>
+                  <div class="eyebrow eyebrow-teal">Learning calendar</div>
+                  <h3>Your consistency, at a glance</h3>
+                </div>
+                <span>Last 12 weeks</span>
+              </div>
+              <div class="heatmap" id="progress-heatmap-container" data-testid="learning-heatmap">
+                <!-- 84 heatmap items generated by script -->
+              </div>
+              <div class="heatmap-legend">
+                <span>Less</span>
+                <i class="heat-0"></i>
+                <i class="heat-2"></i>
+                <i class="heat-4"></i>
+                <span>More</span>
+              </div>
+            </div>
+
+            <!-- Milestones achievements -->
+            <div class="progress-panel">
+              <div class="eyebrow eyebrow-coral">Milestones</div>
+              <h3>Achievements</h3>
+              <div class="achievement-list" id="progress-achievements-container">
+                <!-- Dynamically populated achievements list -->
+              </div>
+            </div>
+          </div>
+
+          <!-- PathFinder Assessment Simulator Form -->
+          <div class="priority-list" style="margin-top: 50px;">
+            <div class="eyebrow eyebrow-teal">Simulate Assessment Grading</div>
+            <h2>Take a skill assessment quiz</h2>
+            <p style="margin-bottom: 20px; font-size: 14px; color: var(--muted);">
+              Submit your test score to dynamically recalculate your readiness levels and unlock target roadmaps.
+            </p>
+            <div class="progress-panel" style="background: white; padding: 25px; border: 1px solid var(--line);">
+              <form id="form-assessment" style="display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-end;">
+                <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
+                  <label for="assess-skill">Select Skill to Assess</label>
+                  <select id="assess-skill" class="form-input" style="width: 100%;" required>
+                    <!-- Options added dynamically -->
+                  </select>
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 150px; margin-bottom: 0;">
+                  <label for="assess-score">Score (0.0 to 1.0)</label>
+                  <input type="number" id="assess-score" class="form-input" min="0" max="1" step="0.05" value="0.8" required>
+                </div>
+                <button type="submit" class="btn-primary" style="padding: 12px 24px;">Submit Grade</button>
+              </form>
+            </div>
+          </div>
+        </main>
+      </section>
+
+
+      <!-- 7. Dashboard View (Logged In Overview) -->
+      <section id="view-dashboard" class="view hidden">
+        <main class="page-frame">
+          <div class="page-hero" style="margin-bottom: 35px;">
+            <div id="dashboard-user-kicker" class="eyebrow eyebrow-teal">Good evening, student</div>
+            <h1 id="dashboard-user-title">Your path to AI Engineer.</h1>
+            <p>A little progress, repeated often, becomes a career you can feel.</p>
+          </div>
+
+          <!-- Stats Overview -->
+          <div id="dashboard-stats-container" class="dashboard-stats">
+            <div class="dash-stat" data-testid="dashboard-stat-0">
+              <strong id="dash-readiness-text">64%</strong>
+              <span>career readiness</span>
+            </div>
+            <div class="dash-stat" data-testid="dashboard-stat-1">
+              <strong id="dash-skills-count">12</strong>
+              <span>skills mapped</span>
+            </div>
+            <div class="dash-stat" data-testid="dashboard-stat-2">
+              <strong id="dash-week-hours">8.5h</strong>
+              <span>this week</span>
+            </div>
+            <div class="dash-stat" data-testid="dashboard-stat-3">
+              <strong id="dash-streak-days">14</strong>
+              <span>day streak</span>
+            </div>
+          </div>
+
+          <!-- Content Grid -->
+          <div class="dashboard-grid">
+            <!-- Left: Weekly rhythm chart -->
+            <div class="dashboard-panel wide">
+              <div class="panel-heading">
+                <div>
+                  <div class="eyebrow eyebrow-teal" style="color: #b7d5c8;">This week</div>
+                  <h3 style="color: white;">Learning rhythm</h3>
+                </div>
+                <span id="dash-total-hours-label">8.5 hours</span>
+              </div>
+              <div class="week-bars" id="dashboard-week-bars">
+                <!-- Dynamically populated bars (Mon-Sun) -->
+              </div>
+            </div>
+
+            <!-- Right: Next resource card -->
+            <div class="dashboard-panel">
+              <div class="eyebrow eyebrow-coral">Next up</div>
+              <h3 id="dash-focus-title">Build a semantic search API</h3>
+              <p id="dash-focus-subtitle">Project · 6 hours · FastAPI</p>
+              
+              <!-- Focus completion actions -->
+              <div id="focus-resource-actions" style="margin-top: 15px; margin-bottom: 20px;">
+                <!-- Mark complete actions loaded by script -->
+              </div>
+              
+              <a class="arrow-link" href="#resources" data-testid="dashboard-next-resource-link" style="margin-top: auto;">
+                Open resource library <i data-lucide="arrow-right" style="width: 15px; height: 15px;"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- PathFinder Live developer terminal logs panel -->
+          <div class="terminal-widget">
+            <div class="terminal-header">
+              <div class="terminal-title">LIVE SYSTEM TELEMETRY CONSOLE LOG</div>
+              <i data-lucide="terminal" style="width: 15px; height: 15px; color: #acc2b7;"></i>
+            </div>
+            <div class="terminal-logs-body">
+              <!-- Logs will scroll here -->
+            </div>
+          </div>
+        </main>
+      </section>
+
+
+      <!-- 8. Profile Settings View -->
+      <section id="view-profile" class="view hidden">
+        <main class="page-frame">
+          <div class="page-hero">
+            <div class="eyebrow eyebrow-teal">Settings console</div>
+            <h1>Profile Settings</h1>
+            <p>Modify your commitments, target goals, and competencies</p>
+          </div>
+
+          <div class="progress-panel" style="background: white;">
+            <div id="profile-success-banner" class="hidden" style="background: var(--teal-light); border: 1px solid var(--teal); color: var(--teal); padding: 12px; margin-bottom: 20px; font-size: 13px;">
+              Profile settings updated successfully!
+            </div>
+            <div id="profile-error-banner" class="error-banner hidden"></div>
+            
+            <form id="form-profile">
+              <div class="profile-form-grid">
+                <div class="form-group">
+                  <label for="profile-name">Full Name</label>
+                  <input type="text" id="profile-name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label for="profile-career">Target Career Path</label>
+                  <select id="profile-career" class="form-input">
+                    <!-- Loaded dynamically -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="profile-experience">Experience Tier</label>
+                  <select id="profile-experience" class="form-input">
+                    <option value="beginner">Beginner Tier</option>
+                    <option value="intermediate">Intermediate Tier</option>
+                    <option value="advanced">Advanced Tier</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="profile-hours">Weekly hours commitment</label>
+                  <div class="range-box" style="padding-top: 10px;">
+                    <input type="range" id="profile-hours" min="1" max="40">
+                    <span id="profile-hours-indicator" class="slider-label">10 Hours</span>
+                  </div>
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                  <label for="profile-interests">Interest Tags (comma separated)</label>
+                  <input type="text" id="profile-interests" class="form-input" placeholder="e.g. Deep Learning, Transformers, Math">
+                </div>
+              </div>
+              <button type="submit" class="btn-primary" style="margin-top: 20px;">Save Profile Settings</button>
+            </form>
+          </div>
+        </main>
+      </section>
+
+
+      <!-- 9. Onboarding Wizard view -->
+      <section id="view-onboarding" class="view hidden">
+        <main class="page-frame" style="background: var(--mist);">
+          <div class="onboarding-wizard">
+            <div class="wizard-progress">
+              <span class="wiz-step active" data-step="1">Career</span>
+              <span class="wiz-bar"></span>
+              <span class="wiz-step" data-step="2">Skills</span>
+              <span class="wiz-bar"></span>
+              <span class="wiz-step" data-step="3">Schedule</span>
+              <span class="wiz-bar"></span>
+              <span class="wiz-step" data-step="4">Review</span>
+            </div>
+            
+            <div id="onboarding-error" class="error-banner hidden"></div>
+
+            <!-- Step 1: Career Select -->
+            <div id="wiz-step-1" class="wizard-panel">
+              <h2>Select Your Target Career</h2>
+              <p class="panel-subtitle">This choice configures your custom curriculum benchmark tracks.</p>
+              <div id="onboarding-careers-grid" class="career-select-grid"></div>
+            </div>
+
+            <!-- Step 2: Skills Selection -->
+            <div id="wiz-step-2" class="wizard-panel hidden">
+              <h2>Identify Existing Skills</h2>
+              <p class="panel-subtitle">Select your registered skills and define initial proficiencies.</p>
+              <div id="onboarding-skills-list" class="skills-toggle-list"></div>
+              <div id="onboarding-sliders-container" class="proficiency-sliders-box"></div>
+            </div>
+
+            <!-- Step 3: Commitment Schedule -->
+            <div id="wiz-step-3" class="wizard-panel hidden">
+              <h2>Commitment Schedule</h2>
+              <p class="panel-subtitle">Align availability and experience constraints.</p>
+              <div class="onboarding-schedule-form">
+                <div class="form-group">
+                  <label for="onboard-hours">Weekly study commitment hours</label>
+                  <div class="range-box">
+                    <input type="range" id="onboard-hours" min="1" max="40" value="10">
+                    <span id="onboard-hours-indicator" class="slider-label">10 Hours</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="onboard-experience">Experience level</label>
+                  <select id="onboard-experience" class="form-input" style="width: 100%;">
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="onboard-interests">Add specific learning interests (comma-separated)</label>
+                  <input type="text" id="onboard-interests" class="form-input" placeholder="e.g. Deep Learning, Algorithms">
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 4: Summary Confirmation -->
+            <div id="wiz-step-4" class="wizard-panel hidden">
+              <h2>Confirm Your Profile</h2>
+              <p class="panel-subtitle">Review your benchmarks. We will generate recommendations immediately.</p>
+              <div id="onboarding-summary-box" class="profile-summary-box"></div>
+            </div>
+
+            <!-- Actions Footer -->
+            <div class="wizard-actions">
+              <button id="btn-wiz-prev" class="btn-secondary hidden"><i data-lucide="arrow-left"></i> Back</button>
+              <button id="btn-wiz-next" class="btn-primary">Continue <i data-lucide="arrow-right"></i></button>
+            </div>
+          </div>
+        </main>
+      </section>
+
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="footer">
+      <a href="#discover" class="brand footer-brand">
+        <span class="brand-mark"><i data-lucide="orbit" style="width: 18px; height: 18px; color: white;"></i></span>
+        <span>PathFinder</span>
+      </a>
+      <p>AI-powered career learning for people in motion.</p>
+      
+      <div class="footer-links">
+        <a href="#careers">Careers</a>
+        <a href="#resources">Resources</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#progress">Progress</a>
+      </div>
+      <span class="footer-copy">© 2026 PathFinder</span>
+    </footer>
+  </div>
+
+  <!-- Global Backdrop Authentication Modal -->
+  <div id="auth-modal" class="modal-backdrop hidden" data-testid="auth-modal">
+    <div class="auth-modal">
+      <button id="auth-close-button" class="modal-close icon-button" aria-label="Close login" data-testid="auth-close-button">
+        <i data-lucide="x" style="width: 17px; height: 17px;"></i>
+      </button>
+      <div class="eyebrow eyebrow-coral">Welcome to your atlas</div>
+      <h2 id="auth-modal-title">Find your way in.</h2>
+      <p id="auth-modal-subtitle">Save your path and start with a clear next step.</p>
+      
+      <div id="auth-error-banner" class="error-banner hidden"></div>
+      
+      <form id="form-auth">
+        <div class="form-group">
+          <label for="auth-input-email">Email address</label>
+          <input type="email" id="auth-input-email" placeholder="you@example.com" required data-testid="auth-email-input">
+        </div>
+
+        <div class="form-group" id="auth-field-name">
+          <label for="auth-input-name">What should we call you?</label>
+          <input type="text" id="auth-input-name" placeholder="Your name" data-testid="auth-name-input">
+        </div>
+
+        <button type="submit" id="btn-auth-submit" class="button button-coral full-button" data-testid="auth-submit-button" style="margin-top: 15px;">
+          Continue to my path <i data-lucide="arrow-right" style="width: 17px; height: 17px;"></i>
+        </button>
+      </form>
+      
+      <small class="auth-note" style="display: block; margin-top: 20px;">By continuing, you’re starting a local preview of your PathFinder journey.</small>
+    </div>
+  </div>
+
+  <!-- Main JavaScript Bundle -->
+  <script src="/app.js"></script>
+</body>
+</html>
