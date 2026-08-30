@@ -2,6 +2,8 @@
 
 > **Winner-ready Hackathon Platform**: Empowering learners to close skill gaps, follow topologically sorted learning roadmaps, and adaptively level up based on real-time feedback loops.
 
+##### **Created by**: Bhabana Kalita, Shivansh Singh, Aditya Gopal, and Harsh Dixit
+
 ---
 
 ## 🎯 The Problem & Our Solution
@@ -165,9 +167,14 @@ python -m pytest tests -v
 | **Auth** | `/api/auth/register` | `POST` | Registers new learners |
 | | `/api/auth/login` | `POST` | Exchanges credentials for Bearer JWT |
 | | `/api/auth/me` | `GET` | Gets current active session details |
-| **Learner** | `/api/learners/profile`| `GET` / `POST` | Configures target goals and schedule |
-| **Skill Gap**| `/api/skill-gap` | `GET` | Computes current vs required gaps & priorities |
-| **Path** | `/api/learning-path` | `GET` | Generates prerequisite-ordered roads |
-| **Match** | `/api/recommendations` | `GET` | Returns scored learning resource list |
-| **Progress**| `/api/progress/complete` | `POST` | Marks resources completed |
-| | `/api/progress/assessment` | `POST` | Accepts quiz grades and updates profiles |
+| **Learner** | `/api/learners/profile`| `GET` | Retrieves profile settings |
+| | `/api/learners/profile`| `POST` | Configures target goals and schedule (onboarding) |
+| **Careers** | `/api/careers` | `GET` | Retrieves reference career paths list |
+| **Skills** | `/api/skills` | `GET` | Retrieves reference skills dictionary |
+| **Resources**| `/api/resources` | `GET` | Retrieves reference learning resources list |
+| **Skill Gap**| `/api/skill-gap` | `GET` | Computes current vs required gaps & priority scores |
+| **Path** | `/api/learning-path` | `GET` | Generates prerequisite-ordered curriculum roadmap |
+| **Match** | `/api/recommendations` | `GET` | Returns scored learning resource matching list |
+| **Progress**| `/api/progress/complete` | `POST` | Marks resource item as completed |
+| | `/api/progress/assessment` | `POST` | Accepts quiz score and dynamically updates skill level |
+| | `/api/progress/report` | `GET` | Retrieves profile stats (readiness, strengths, struggles, hours) |
