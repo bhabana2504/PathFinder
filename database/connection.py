@@ -6,6 +6,11 @@ from sqlalchemy.orm import sessionmaker
 # Default to SQLite for local development, support PostgreSQL for production
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///pathfinder.db")
 
+# Normalize PostgreSQL URL scheme for Render compatibility
+# Render may provide postgres:// but SQLAlchemy 2.0+ requires postgresql://
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 # SQLite needs special arguments for thread safety during local development
 connect_args = {}
 if DATABASE_URL.startswith("sqlite"):

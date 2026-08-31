@@ -24,5 +24,5 @@ COPY . .
 # Expose port
 EXPOSE 8000
 
-# Start command: Apply migrations, seed, and launch FastAPI
-CMD ["sh", "-c", "alembic upgrade head && python -m database.seed && uvicorn api.main:app --host 0.0.0.0 --port 8000"]
+# Use PORT env var (default to 8000 for local development)
+CMD ["sh", "-c", "alembic upgrade head && python -m database.seed && uvicorn api.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

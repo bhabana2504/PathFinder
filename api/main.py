@@ -27,9 +27,12 @@ app = FastAPI(
 )
 
 # CORS configuration
+# The frontend is served from the same domain in production, so CORS is
+# mainly for development. Using ["*"] is acceptable for this SPA setup.
+# In production, both frontend and API run on the same Render domain.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust for production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -60,5 +63,7 @@ def health_check():
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
 
 if __name__ == "__main__":
+    import os
     import uvicorn
-    uvicorn.run("api.main:app", host="0.0.0.0", port=8000, reload=True)
+    port = int(os.getenv("PORT", "8000"))
+    uvicorn.run("api.main:app", host="0.0.0.0", port=port, reload=False)

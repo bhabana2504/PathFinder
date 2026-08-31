@@ -1,7 +1,8 @@
 // --- CENTRAL API CLIENT & AUTH STATE ---
-const BASE_URL = window.location.origin === "null" || window.location.protocol === "file:" || !window.location.host.includes("8000")
-  ? "http://127.0.0.1:8000"
-  : ""; 
+const BASE_URL =
+  window.location.protocol === "file:" || window.location.origin === "null"
+    ? "http://127.0.0.1:8000"
+    : ""; 
 let currentUser = null;
 let token = localStorage.getItem("token");
 
@@ -49,8 +50,30 @@ async function apiRequest(endpoint, method = "GET", body = null) {
     }
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ detail: "Request failed" }));
-      throw new Error(errorData.detail || "API request failed");
+      let errorMessage = "Request failed";
+      
+      try {
+        const errorData = await response.json();
+        
+        // Handle Pydantic validation errors (HTTP 422)
+        if (response.status === 422 && errorData.detail && Array.isArray(errorData.detail)) {
+          const validationErrors = errorData.detail
+            .map(err => {
+              const field = err.loc ? err.loc[err.loc.length - 1] : "field";
+              return `${field}: ${err.msg}`;
+            })
+            .join("; ");
+          errorMessage = validationErrors || "Validation failed";
+        } else if (errorData.detail) {
+          errorMessage = typeof errorData.detail === "string" 
+            ? errorData.detail 
+            : JSON.stringify(errorData.detail);
+        }
+      } catch (parseError) {
+        errorMessage = response.statusText || "Request failed";
+      }
+      
+      throw new Error(errorMessage);
     }
 
     if (response.status === 204) return {};
