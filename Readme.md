@@ -1,20 +1,18 @@
-# 🧭 PathFinder AI — Dynamic Career Roadmap & Adaptive Learning Engine
-
-> **Winner-ready Hackathon Platform**: Empowering learners to close skill gaps, follow topologically sorted learning roadmaps, and adaptively level up based on real-time feedback loops.
+# PathFinder AI — Dynamic Career Roadmap & Adaptive Learning Engine
 
 ##### **Created by**: Bhabana Kalita, Shivansh Singh, Aditya Gopal, and Harsh Dixit
 
 ---
 
-## 🎯 The Problem & Our Solution
+## The Problem & Our Solution
 
-### ⚠️ The Problem
+### The Problem
 Traditional online learning is overwhelming. Students facing a career transition are confronted with thousands of courses, but have no clear sense of:
 1. **What skills they actually lack** for a specific job profile.
 2. **The correct learning sequence** (prerequisites) to build complex skills.
 3. **How to measure and adapt** their learning plan when they fail or pass assessments.
 
-### 💡 The Solution (PathFinder AI)
+### The Solution (PathFinder AI)
 PathFinder AI is a closed-loop personalized curriculum agent. It connects a Python FastAPI backend with a zero-dependency HTML5/CSS3/JS single page application to:
 * **Quantify Skill Gaps**: Compare current student proficiencies against industry-standard career profiles.
 * **Topologically Sort the Curriculum**: Create a strict prerequisite graph (e.g., Python must be learned before ML, which must be learned before RAG).
@@ -22,56 +20,60 @@ PathFinder AI is a closed-loop personalized curriculum agent. It connects a Pyth
 
 ---
 
-## 🏗️ System Architecture & Data Pipelines
+## System Architecture & Data Pipelines
 
 ### 1. High-Level System Architecture
 
 ```mermaid
 flowchart TD
-    subgraph Frontend["Presentation Layer (Frontend SPA)"]
-        UI["HTML5 / CSS3 / Vanilla JS SPA"]
+    subgraph Frontend [Frontend SPA]
+        UI["HTML5 / CSS3 / Vanilla JS"]
         Router["Client Hash Router (app.js)"]
-        Views["Views: Discover, Careers, Skills, Resources, Dashboard"]
-        SVG["Zero-Dependency SVG Chart Generator"]
+        Views["Client Views"]
+        SVG["Custom SVG Charts"]
         UI --> Router
         Router --> Views
         Views --> SVG
     end
 
-    subgraph Backend["API Gateway & Controller Layer"]
+    subgraph Backend [API Layer]
         FastAPI["FastAPI Web Framework (api/main.py)"]
-        Pydantic["Pydantic v2 Schema Validation"]
-        AuthGuard["JWT Authenticated Session Guard"]
-        FastAPI --- Pydantic
-        FastAPI --- AuthGuard
+        Pydantic["Pydantic v2 Validation"]
+        AuthGuard["JWT Auth Guard"]
+        FastAPI --> Pydantic
+        FastAPI --> AuthGuard
     end
 
-    subgraph Engines["Business Logic & AI Engines"]
+    subgraph Engines [AI & Logic Engines]
         GapEngine["Skill Gap Analyzer"]
         RecEngine["Recommendation Ranker"]
-        PathEngine["Prerequisite Roadmap Sort"]
-        AdaptiveEngine["Adaptive Assessment Loop"]
+        PathEngine["Prerequisite Roadmap Engine"]
+        AdaptiveEngine["Adaptive Learning Loop"]
     end
 
-    subgraph DataLayer["Data Access & Storage"]
-        ORM["SQLAlchemy ORM Connection Pool"]
-        CRUD["Database CRUD Layer"]
-        Migrations["Alembic Migrations"]
-        DB[("Database: SQLite / PostgreSQL")]
+    subgraph Storage [Data Storage]
+        ORM["SQLAlchemy ORM"]
+        CRUD["CRUD Service Layer"]
+        DB[("Database: SQLite / Postgres")]
         ORM --> CRUD
-        Migrations --> DB
         CRUD --> DB
     end
 
-    subgraph DevOps["DevOps & Containerization"]
-        Docker["Docker Image (Dockerfile)"]
+    subgraph DevOps [DevOps]
+        Docker["Docker Image"]
         Compose["Docker Compose"]
         CI["GitHub Actions CI/CD"]
     end
 
-    Frontend -->|HTTP / JSON / Bearer JWT| Backend
-    Backend --> Engines
-    Engines --> DataLayer
+    UI -->|REST / JSON / JWT| FastAPI
+    FastAPI --> GapEngine
+    FastAPI --> RecEngine
+    FastAPI --> PathEngine
+    FastAPI --> AdaptiveEngine
+    GapEngine --> ORM
+    RecEngine --> ORM
+    PathEngine --> ORM
+    AdaptiveEngine --> ORM
 ```
 
 ### 2. Adaptive Agent & Learning Pipeline
@@ -89,23 +91,23 @@ flowchart TD
 
 ---
 
-## 🛠️ Technical Stack
+## Technical Stack
 
-*   **🎨 Frontend (Single Page Application)**:
+*   **Frontend (Single Page Application)**:
     *   **Vanilla JS (ES6+)**: Custom dynamic client router and template renderer. Using vanilla JS keeps the bundle size at near-zero, enabling sub-millisecond page transitions without framework overhead.
     *   **Tailwind CSS & Custom Flex/Grid Styles**: For high-fidelity editorial responsive layout structures.
     *   **Custom SVG Renderer**: Custom drawing routines to render comparison grids and circular progress rings directly in the DOM, eliminating the need for bulky third-party charting libraries.
     *   **Lucide Icons & Web Fonts**: Renders premium typography (`Playfair Display` for editorial headings, `DM Sans` for body, `DM Mono` for metadata stats).
-*   **⚙️ Backend (REST APIs)**:
+*   **Backend (REST APIs)**:
     *   **FastAPI (Python 3.12)**: A modern, high-performance, asynchronous web framework for building APIs with Python.
     *   **Pydantic v2**: Handles request payload parsing and response serialization with strict type safety.
     *   **SQLAlchemy ORM**: For database modeling and querying.
     *   **PyJWT & Passlib**: Encodes and decodes secure JSON Web Tokens for session handling.
-*   **💾 Database & Migrations**:
+*   **Database & Migrations**:
     *   **SQLite**: Serves as the default local development database (stored in `pathfinder.db`).
     *   **PostgreSQL**: Configured in production and containerized environments.
     *   **Alembic**: Database schema migration controller to manage, version, and apply schema updates.
-*   **🐳 DevOps & Testing**:
+*   **DevOps & Testing**:
     *   **Docker**: Packages the FastAPI backend and frontend assets inside a unified application image.
     *   **Docker Compose**: Automatically provisions PostgreSQL and mounts the web application.
     *   **Pytest**: Integration and unit testing suite with 47 automated test assertions.
@@ -113,7 +115,7 @@ flowchart TD
 
 ---
 
-## 📂 File Structure
+## File Structure
 
 ```text
 pathfinder_ai/
@@ -151,7 +153,7 @@ pathfinder_ai/
 
 ---
 
-## 🛠️ Installation & Setup
+## Installation & Setup
 
 ### 1. Prerequisites
 * **Python 3.12+**
@@ -203,7 +205,7 @@ The server will be available on port `8000`.
 
 ---
 
-## 🧪 Testing & Verification
+## Testing & Verification
 
 To verify database structures, path generators, recommendation scores, and auth JWT endpoints, execute pytest:
 ```bash
@@ -213,7 +215,7 @@ python -m pytest tests -v
 
 ---
 
-## 🔌 Core API Endpoints
+## Core API Endpoints
 
 | Category | Endpoint | Method | Purpose |
 | :--- | :--- | :--- | :--- |
