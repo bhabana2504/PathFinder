@@ -24,111 +24,37 @@ PathFinder AI is a closed-loop personalized curriculum agent. It connects a Pyth
 
 ### 1. High-Level System Architecture
 
-```text
-+===================================================================================================+
-|                                    PATHFINDER AI SYSTEM ARCHITECTURE                              |
-+===================================================================================================+
-|                                                                                                   |
-|  [ LAYER 1: CLIENT PRESENTATION LAYER (SPA) ]                                                     |
-|  +---------------------------------------------------------------------------------------------+  |
-|  |  Vanilla JS (ES6+) Single Page Application  *  Tailwind CSS Responsive Editorial Layout     |  |
-|  |                                                                                             |  |
-|  |  +-------------------+  +----------------------------------------------------------------+  |  |
-|  |  | Hash Router       |  | Active UI Views:                                               |  |  |
-|  |  | (app.js)          |  |  * #discover   : Hero Landing & Dynamic Previews               |  |  |
-|  |  |  * State Machine  |  |  * #careers    : Career Atlas & Role Taxonomy                   |  |  |
-|  |  |  * Route Guard    |  |  * #skills     : Visual Skill Gap Breakdown                    |  |  |
-|  |  |  * View Switcher  |  |  * #roadmap    : Prerequisite Learning Timeline                 |  |  |
-|  |  |  * History Sync   |  |  * #dashboard  : Readiness Meter & Match Stream                |  |  |
-|  |  +---------+---------+  |  * #progress   : Adaptive Assessment Quizzes                   |  |  |
-|  |            |            |  * #onboarding : 4-Step Interactive Intake Wizard              |  |  |
-|  |            v            +----------------------------------------------------------------+  |  |
-|  |  +---------------------------------------------------------------------------------------+  |  |
-|  |  | Zero-Dependency SVG Renderer (Circular Readiness Rings, Interactive Radar Bars)        |  |  |
-|  |  +---------------------------------------------------------------------------------------+  |  |
-|  +----------------------------------------------+----------------------------------------------+  |
-|                                                 |                                                 |
-|                                                 | HTTPS / REST APIs / JSON / Bearer JWT Tokens    |
-|                                                 v                                                 |
-|  [ LAYER 2: API GATEWAY & SECURITY LAYER ]                                                        |
-|  +---------------------------------------------------------------------------------------------+  |
-|  |  FastAPI Asynchronous Gateway (api/main.py)                                                  |  |
-|  |                                                                                             |  |
-|  |  +---------------------------+  +---------------------------+  +-------------------------+  |  |
-|  |  | CORS & Static Middleware  |  | Pydantic v2 Validators    |  | JWT Session Guard       |  |  |
-|  |  |  * Origins: [*]           |  |  * Request Payloads       |  |  * Bearer HTTP Header   |  |  |
-|  |  |  * SPA Static Mounting    |  |  * Response Serialization |  |  * Token Decoder        |  |  |
-|  |  |  * Dynamic Port Binding   |  |  * Strict Field Types     |  |  * Passlib / bcrypt     |  |  |
-|  |  +---------------------------+  +---------------------------+  +-------------------------+  |  |
-|  +----------------------------------------------+----------------------------------------------+  |
-|                                                 |                                                 |
-|                                                 | Dispatches Validated Request Payloads           |
-|                                                 v                                                 |
-|  [ LAYER 3: CORE AGENT & BUSINESS ENGINE LAYER ]                                                  |
-|  +---------------------------------------------------------------------------------------------+  |
-|  |                                                                                             |  |
-|  |  +-----------------------------------+     +---------------------------------------------+  |  |
-|  |  | Skill Gap Analyzer Engine         |     | Recommendation Ranker Engine                |  |  |
-|  |  | (skill_gap/analyzer.py)           |     | (recommendation/recommender.py)             |  |  |
-|  |  |  * Proficiency Delta Calculator   |     |  * Multi-Factor Resource Matcher            |  |  |
-|  |  |  * Priority Weight Calculation     |     |  * Skill Gap Urgency Scoring                |  |  |
-|  |  |  * Missing Skill Detection        |     |  * Difficulty / Duration Filtering          |  |  |
-|  |  +-----------------------------------+     +---------------------------------------------+  |  |
-|  |                                                                                             |  |
-|  |  +-----------------------------------+     +---------------------------------------------+  |  |
-|  |  | Prerequisite Roadmap Engine       |     | Adaptive Assessment Engine                  |  |  |
-|  |  | (learning_path/generator.py)      |     | (adaptive_learning/updater.py)              |  |  |
-|  |  |  * Topological Dependency Sorter  |     |  * Dynamic Score Evaluator                  |  |  |
-|  |  |  * DAG Prerequisite Graph Gen     |     |  * Proficiency Level Recalibration          |  |  |
-|  |  |  * Milestone Sequencer            |     |  * Closed-Loop Feedback Sync                |  |  |
-|  |  +-----------------------------------+     +---------------------------------------------+  |  |
-|  +----------------------------------------------+----------------------------------------------+  |
-|                                                 |                                                 |
-|                                                 | SQLAlchemy 2.0 ORM Object Mappings              |
-|                                                 v                                                 |
-|  [ LAYER 4: DATA PERSISTENCE & STORAGE LAYER ]                                                    |
-|  +---------------------------------------------------------------------------------------------+  |
-|  |  SQLAlchemy 2.0 Session Pool & CRUD Data Access Object (database/crud.py)                   |  |
-|  |                                                                                             |  |
-|  |  +---------------------------------------------------------------------------------------+  |  |
-|  |  | Entity Models: Users, LearnerProfiles, Skills, Prerequisites, Careers, Resources,     |  |  |
-|  |  |                 Assessments, CompletedResources, Recommendations, LearningPaths       |  |  |
-|  |  +---------------------------------------------------------------------------------------+  |  |
-|  |                                                                                             |  |
-|  |  +----------------------------------------+     +----------------------------------------+  |  |
-|  |  | SQLite Local Database                  |     | PostgreSQL Production Database         |  |  |
-|  |  |  * pathfinder.db (Zero config local)   |     |  * Render Cloud Managed Database       |  |  |
-|  |  |  * Alembic Migration Versioning        |     |  * Auto-Normalized Connection URI      |  |  |
-|  |  +----------------------------------------+     +----------------------------------------+  |  |
-|  +---------------------------------------------------------------------------------------------+  |
-|                                                                                                   |
-|  [ LAYER 5: DEVOPS, TESTING & CONTAINERIZATION ]                                                  |
-|  +---------------------------------------------------------------------------------------------+  |
-|  |  * Dockerfile (Multi-stage Python 3.12-slim container with dynamic ${PORT} binding)         |  |
-|  |  * Docker Compose (Orchestrates FastAPI application + PostgreSQL services)                  |  |
-|  |  * Pytest Test Suite (47 automated unit, engine, and endpoint integration tests)            |  |
-|  |  * GitHub Actions (Continuous Integration validation workflow on every push)                |  |
-|  +---------------------------------------------------------------------------------------------+  |
-+===================================================================================================+
+```mermaid
+graph TD
+    Client[Frontend Client SPA] -->|REST API / JWT| API[FastAPI Web Server]
+    
+    subgraph Services[Core Engine Services]
+        API --> Auth[JWT Auth Guard]
+        API --> Gap[Skill Gap Analyzer]
+        API --> Rec[Recommendation Matcher]
+        API --> Path[Roadmap Generator]
+        API --> Quiz[Adaptive Assessment]
+    end
+
+    subgraph Storage[Persistence Layer]
+        Gap --> DB[(Database: SQLite / PostgreSQL)]
+        Rec --> DB
+        Path --> DB
+        Quiz --> DB
+    end
 ```
 
 ### 2. Adaptive Agent & Learning Pipeline
 
-```text
-+---------------------------------------------------------------------------------------------------+
-|                              ADAPTIVE AGENT CLOSED-LOOP PIPELINE                                  |
-+---------------------------------------------------------------------------------------------------+
-|                                                                                                   |
-|  [ 1. User Intake ]  -->  [ 2. Gap Analysis ]  -->  [ 3. Priority Sort ]  -->  [ 4. DAG Roadmap ] |
-|  * Career Goal            * Current vs Target       * Weighted Urgency         * Topological Sort |
-|  * Study Schedule         * Missing Skills          * Prerequisite Order       * Milestones       |
-|                                                                                             |     |
-|                                                                                             v     |
-|  [ 7. Profile Recalibration ] <-- [ 6. Adaptive Quiz ] <-- [ 5. Ranked Content Recommendations ]   |
-|  * Dynamic Score Update           * Mastery Check          * Multi-factor scoring                 |
-|  * Loop back to Step 2            * Assessment Engine      * High-affinity matching               |
-|                                                                                                   |
-+---------------------------------------------------------------------------------------------------+
+```mermaid
+graph LR
+    A[Onboarding] --> B[Skill Gap Analysis]
+    B --> C[Priority Queue]
+    C --> D[Prerequisite DAG]
+    D --> E[Recommendation Engine]
+    E --> F[Dashboard Timeline]
+    F --> G[Adaptive Quiz]
+    G -->|Recalibrate| B
 ```
 
 ---
