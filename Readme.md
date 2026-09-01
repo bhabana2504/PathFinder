@@ -1,4 +1,4 @@
-# PathFinder AI — Dynamic Career Roadmap & Adaptive Learning Engine
+# PathFinder AI - Dynamic Career Roadmap & Adaptive Learning Engine
 
 **Created by**: Bhabana Kalita, Shivansh Singh, Aditya Gopal, and Harsh Dixit
 
