@@ -15,6 +15,7 @@ Traditional online learning is overwhelming. Students facing a career transition
 3. **How to measure and adapt** their learning plan when they fail or pass assessments.
 
 ### The Solution (PathFinder AI)
+
 ##### Live preview :- https://pathfinder-837k.onrender.com/
 
 PathFinder AI is a closed-loop personalized curriculum agent. It connects a Python FastAPI backend with a zero-dependency HTML5/CSS3/JS single page application to:
