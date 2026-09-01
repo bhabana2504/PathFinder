@@ -27,8 +27,8 @@ PathFinder AI is a closed-loop personalized curriculum agent. It connects a Pyth
 ```mermaid
 flowchart TD
     subgraph Frontend [Frontend SPA]
-        UI["HTML5 / CSS3 / Vanilla JS"]
-        Router["Client Hash Router (app.js)"]
+        UI["HTML5, CSS3, Vanilla JS"]
+        Router["Client Hash Router app.js"]
         Views["Client Views"]
         SVG["Custom SVG Charts"]
         UI --> Router
@@ -37,14 +37,14 @@ flowchart TD
     end
 
     subgraph Backend [API Layer]
-        FastAPI["FastAPI Web Framework (api/main.py)"]
+        FastAPI["FastAPI Web Framework api-main.py"]
         Pydantic["Pydantic v2 Validation"]
         AuthGuard["JWT Auth Guard"]
         FastAPI --> Pydantic
         FastAPI --> AuthGuard
     end
 
-    subgraph Engines [AI & Logic Engines]
+    subgraph Engines [AI and Logic Engines]
         GapEngine["Skill Gap Analyzer"]
         RecEngine["Recommendation Ranker"]
         PathEngine["Prerequisite Roadmap Engine"]
@@ -54,7 +54,7 @@ flowchart TD
     subgraph Storage [Data Storage]
         ORM["SQLAlchemy ORM"]
         CRUD["CRUD Service Layer"]
-        DB[("Database: SQLite / Postgres")]
+        DB["Database: SQLite or Postgres"]
         ORM --> CRUD
         CRUD --> DB
     end
@@ -62,10 +62,10 @@ flowchart TD
     subgraph DevOps [DevOps]
         Docker["Docker Image"]
         Compose["Docker Compose"]
-        CI["GitHub Actions CI/CD"]
+        CI["GitHub Actions CI-CD"]
     end
 
-    UI -->|REST / JSON / JWT| FastAPI
+    UI -->|REST JSON JWT| FastAPI
     FastAPI --> GapEngine
     FastAPI --> RecEngine
     FastAPI --> PathEngine
@@ -76,10 +76,10 @@ flowchart TD
     AdaptiveEngine --> ORM
 ```
 
-### 2. Adaptive Agent & Learning Pipeline
+### 2. Adaptive Agent and Learning Pipeline
 ```mermaid
 flowchart TD
-    Onboarding["Onboarding: Select Target & Skills"] -->|Save Profile| DB[("Learner Profile DB")]
+    Onboarding["Onboarding: Select Target and Skills"] -->|Save Profile| DB["Learner Profile DB"]
     DB -->|Analyze Gaps| Gap["Skill Gap Analysis"]
     Gap -->|Scoring Weights| Queue["Priority Sorted Skill Queue"]
     Queue -->|Topological Sort| Graph["Prerequisite Graph Generator"]
