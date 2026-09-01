@@ -27,90 +27,63 @@ PathFinder AI is a closed-loop personalized curriculum agent. It connects a Pyth
 ### 1. High-Level System Architecture
 
 ```mermaid
-graph TD
-    %% Styling
-    classDef client fill:#e87559,stroke:#17352f,stroke-width:2px,color:#fff;
-    classDef api fill:#20867d,stroke:#17352f,stroke-width:2px,color:#fff;
-    classDef engine fill:#e7ba55,stroke:#17352f,stroke-width:2px,color:#17352f;
-    classDef data fill:#f7f6f1,stroke:#17352f,stroke-width:2px,color:#17352f;
-    classDef infrastructure fill:#94cfc4,stroke:#17352f,stroke-width:2px,color:#17352f;
-
-    subgraph Client_Presentation_Layer ["Presentation Layer (Frontend SPA)"]
-        UI["HTML5 / CSS3 / ES6 Single Page Application"]
+flowchart TD
+    subgraph Frontend["Presentation Layer (Frontend SPA)"]
+        UI["HTML5 / CSS3 / Vanilla JS SPA"]
         Router["Client Hash Router (app.js)"]
-        Views["Views: Discover, Careers, Skills, Resources, Dashboard, Onboarding"]
+        Views["Views: Discover, Careers, Skills, Resources, Dashboard"]
         SVG["Zero-Dependency SVG Chart Generator"]
         UI --> Router
         Router --> Views
         Views --> SVG
     end
-    
-    subgraph API_Gateway_Layer ["API Gateway & Controller Layer"]
-        FastAPI["FastAPI App Instance (api/main.py)"]
-        Pydantic["Pydantic schemas Validation (api/schemas)"]
-        AuthGuard["JWT Authenticated Session Guard (api/auth.py)"]
-        FastAPI <--> Pydantic
-        FastAPI <--> AuthGuard
+
+    subgraph Backend["API Gateway & Controller Layer"]
+        FastAPI["FastAPI Web Framework (api/main.py)"]
+        Pydantic["Pydantic v2 Schema Validation"]
+        AuthGuard["JWT Authenticated Session Guard"]
+        FastAPI --- Pydantic
+        FastAPI --- AuthGuard
     end
 
-    subgraph Business_Engine_Layer ["Business Logic & Agent Engines"]
-        GapEngine["Skill Gap Analyzer (skill_gap/analyzer.py)"]
-        RecEngine["Recommendation Ranker (recommendation/recommender.py)"]
-        PathEngine["Prerequisite Roadmap Sort (learning_path/generator.py)"]
-        AdaptiveEngine["Adaptive assessment updater (adaptive_learning/updater.py)"]
+    subgraph Engines["Business Logic & AI Engines"]
+        GapEngine["Skill Gap Analyzer"]
+        RecEngine["Recommendation Ranker"]
+        PathEngine["Prerequisite Roadmap Sort"]
+        AdaptiveEngine["Adaptive Assessment Loop"]
     end
 
-    subgraph Data_Persistence_Layer ["Data Access & Storage Layer"]
-        ORM["SQLAlchemy ORM Connection Pool (database/connection.py)"]
-        CRUD["Database Transaction Queries (database/crud.py)"]
-        Migrations["Alembic Migrations Schemas (alembic/)"]
-        Seeder["Dataset Initializer (database/seed.py)"]
-        SQLite[("Local SQLite Development (pathfinder.db)")]
-        Postgres[("PostgreSQL Production Database")]
-        
+    subgraph DataLayer["Data Access & Storage"]
+        ORM["SQLAlchemy ORM Connection Pool"]
+        CRUD["Database CRUD Layer"]
+        Migrations["Alembic Migrations"]
+        DB[("Database: SQLite / PostgreSQL")]
         ORM --> CRUD
-        Migrations --> SQLite
-        Seeder --> SQLite
-        CRUD --> SQLite
-        CRUD --> Postgres
+        Migrations --> DB
+        CRUD --> DB
     end
 
-    subgraph DevOps_Automation ["DevOps & Pipeline Automation"]
+    subgraph DevOps["DevOps & Containerization"]
         Docker["Docker Image (Dockerfile)"]
-        Compose["Docker Compose Orchestrator"]
-        CI["GitHub Actions Workflows (ci.yml)"]
+        Compose["Docker Compose"]
+        CI["GitHub Actions CI/CD"]
     end
 
-    %% Routing lines
-    UI <-->|HTTP / JSON / Bearer Token| FastAPI
-    
-    FastAPI <--> GapEngine
-    FastAPI <--> RecEngine
-    FastAPI <--> PathEngine
-    FastAPI <--> AdaptiveEngine
-    
-    GapEngine <--> ORM
-    RecEngine <--> ORM
-    PathEngine <--> ORM
-    AdaptiveEngine <--> ORM
-
-    class UI,Router,Views,SVG client;
-    class FastAPI,Pydantic,AuthGuard api;
-    class GapEngine,RecEngine,PathEngine,AdaptiveEngine engine;
-    class ORM,CRUD,Migrations,Seeder,SQLite,Postgres data;
-    class Docker,Compose,CI infrastructure;
+    Frontend -->|HTTP / JSON / Bearer JWT| Backend
+    Backend --> Engines
+    Engines --> DataLayer
 ```
 
 ### 2. Adaptive Agent & Learning Pipeline
 ```mermaid
-graph TD
-    Onboarding[Onboarding: Select Target & Skills] -->|Save Profile| DB[(Learner Profile DB)]
-    DB -->|Analyze Gaps| Gap[Skill Gap Analysis]
-    Gap -->|Scoring Weights| Queue[Priority Sorted Skill Queue]
-    Queue -->|Topological Sort| Graph[Prerequisite Graph Generator]
-    Graph -->|Query Matching Resources| Matcher[Recommendation Matcher]
-    Matcher -->|Render Timeline UI| Dashboard[Dynamic Dashboard Timeline]
-    Dashboard -->|Submit Mock Quiz| Assessment[Adaptive Assessment Engine]
+flowchart TD
+    Onboarding["Onboarding: Select Target & Skills"] -->|Save Profile| DB[("Learner Profile DB")]
+    DB -->|Analyze Gaps| Gap["Skill Gap Analysis"]
+    Gap -->|Scoring Weights| Queue["Priority Sorted Skill Queue"]
+    Queue -->|Topological Sort| Graph["Prerequisite Graph Generator"]
+    Graph -->|Query Matching Resources| Matcher["Recommendation Matcher"]
+    Matcher -->|Render Timeline UI| Dashboard["Dynamic Dashboard Timeline"]
+    Dashboard -->|Submit Quiz| Assessment["Adaptive Assessment Engine"]
     Assessment -->|Recalculate Proficiencies| DB
 ```
 
